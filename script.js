@@ -1,4 +1,4 @@
-(function() {
+(function( DOM ) {
     'use strict';
   
     /*
@@ -20,7 +20,7 @@
     carros cadastrados. Ao clicar no botão de cadastrar, o novo carro deverá
     aparecer no final da tabela.
     Agora você precisa dar um nome para o seu app. Imagine que ele seja uma
-    empresa que vende carros. Esse nosso app será só um catálogo, por enquanto.
+    empresa que vende carros.rEsse nosso app será só um catálogo, por enquanto.
     Dê um nome para a empresa e um telefone fictício, preechendo essas informações
     no arquivo company.json que já está criado.
     Essas informações devem ser adicionadas no HTML via Ajax.
@@ -31,5 +31,39 @@
     que será nomeado de "app".
     */
   
-    
-  })();
+   function app() { 
+    return { 
+      init: function init() { 
+        console.log('app Init'); 
+        this.initEvent(); 
+      }, 
+      comapnyInfo: function comapnyInfo () { 
+        var ajax = new XMLHttpRequest(); 
+        ajax.open('GET',  '/company.json' , true  ); 
+        ajax.send();
+        ajax.addEventListener( 'onreadystatechange' , getCompanyInfor , false); 
+
+       },
+       getCompanyInfor: function getCompanyInfor() { 
+         if(!app().isReady.call(this))
+            return; 
+
+            var data = JSON.parse(this.reponseText); 
+            var $companyName = new DOM('data-js="company-name"'); 
+            var $companyPhone = new DOM('data-js="company-phone"');
+            $companyName.textContent = data.name; 
+            $companyPhone.textContent = data.phone; 
+       },
+
+       isReady: function isReady() {
+         return this.readyState === 4 && this.status === 200; 
+       }  
+     }; 
+   }
+
+   app().init(); 
+
+   console.log({} instanceof Object); 
+   
+
+  })( window.DOM);
